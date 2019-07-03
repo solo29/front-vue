@@ -15,7 +15,6 @@
     </v-toolbar>
 
     <v-content>
-      {{categories}}
       <router-view></router-view>
     </v-content>
   </v-app>
@@ -31,9 +30,10 @@ export default {
     HelloWorld
   },
   methods: {},
-  computed: mapState(["categories"]),
+  computed: mapState(["categories", "products"]),
   mounted() {
     this.$store.dispatch("getCategories");
+    this.$store.dispatch("getProducts");
   }
 };
 </script>
