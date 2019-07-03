@@ -9,7 +9,7 @@
       <v-btn flat to="/">
         <span class="mr-2">Home</span>
       </v-btn>
-
+      <v-text-field v-model="searchString" clearable hide-details prepend-icon="search" single-line></v-text-field>
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
           <v-btn color="primary" dark v-on="on">Department</v-btn>
@@ -44,7 +44,18 @@ export default {
   name: "App",
 
   methods: {},
-  computed: mapState(["categories", "products", "departments"]),
+  computed: {
+    ...mapState(["categories", "products", "departments"]),
+    searchString: {
+      set(val) {
+        console.log(val);
+        this.$store.dispatch("searchProducts", val);
+      },
+      get() {
+        return this.$store.state.searchString;
+      }
+    }
+  },
   mounted() {
     this.$store.dispatch("getCategories");
     this.$store.dispatch("getProducts");

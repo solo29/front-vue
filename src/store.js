@@ -9,7 +9,7 @@ export default new Vuex.Store({
     categories: [],
     departments: [],
     selectedTerm: null,
-
+    searchString: null,
     products: [],
     page: 1,
     productPerPage: 6,
@@ -34,6 +34,9 @@ export default new Vuex.Store({
 
     SET_SELECTED_TERM(state, term) {
       state.selectedTerm = term;
+    },
+    SET_SEARCH_STRING(state, term) {
+      state.searchString = term;
     }
   },
   actions: {
@@ -45,6 +48,14 @@ export default new Vuex.Store({
     getDepartments({ commit }) {
       axios.get("https://backendapi.turing.com/departments").then(res => {
         commit("SET_DEPARTMENTS", res.data);
+      });
+    },
+    searchProducts({ commit, state }, searchString) {
+      commit("SET_SEARCH_STRING", searchString);
+
+      let query = searchString ? `search?query_string=${searchString}&all_words=on&` : "?";
+      axios.get(`https://backendapi.turing.com/products/${query}page=${state.page}&limit=${state.productPerPage}`).then(res => {
+        commit("SET_PRODUCTS", res.data);
       });
     },
     getProducts({ commit, state }, params) {
