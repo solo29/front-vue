@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>This is an products page</h1>
+
     <v-container>
       <v-layout row wrap>
         <v-flex class="pa-5" md4 v-for="product in products.rows" :key="product.product_id">
