@@ -1,33 +1,43 @@
 <template>
-  <div>
-    <v-container>
-      <v-layout row wrap>
-        <v-flex class="pa-5" md4 v-for="product in products.rows" :key="product.product_id">
-          <v-card :to="'/product/'+product.product_id">
-            <v-img :src="'https://backendapi.turing.com/images/products/'+product.thumbnail"></v-img>
-            <v-card-title primary-title>
-              <div>
-                <div class="headline">{{product.name}}</div>
-                <div v-if="_.get(product, 'discounted_price')>0">
-                  <span class="line-through">{{product.price}}$</span> &nbsp;
-                  <span>{{product.discounted_price}}$</span>
-                </div>
-                <div v-else>
-                  <span>{{product.price}}$</span>
-                </div>
-              </div>
-            </v-card-title>
-          </v-card>
-        </v-flex>
-      </v-layout>
-
-      <v-pagination v-if="products.count" v-model="page" :length="Math.ceil(products.count / productPerPage)"></v-pagination>
-    </v-container>
+  <div class="main-container">
+    <v-layout row wrap>
+      <v-flex md4>
+        <FilterComponent/>
+      </v-flex>
+      <v-flex md8>
+        <v-container>
+          <v-layout row wrap>
+            <v-flex class="pa-2" md4 v-for="product in products.rows" :key="product.product_id">
+              <v-card :to="'/product/'+product.product_id">
+                <v-img :src="'https://backendapi.turing.com/images/products/'+product.thumbnail"></v-img>
+                <v-card-title primary-title>
+                  <div>
+                    <div class="headline">{{product.name}}</div>
+                    <div v-if="_.get(product, 'discounted_price')>0">
+                      <span class="line-through">{{product.price}}$</span> &nbsp;
+                      <span>{{product.discounted_price}}$</span>
+                    </div>
+                    <div v-else>
+                      <span>{{product.price}}$</span>
+                    </div>
+                  </div>
+                </v-card-title>
+              </v-card>
+            </v-flex>
+          </v-layout>
+          <v-pagination v-if="products.count" v-model="page" :length="Math.ceil(products.count / productPerPage)"></v-pagination>
+        </v-container>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 <script>
+import FilterComponent from "../components/FilterComponent";
 import { mapState } from "vuex";
 export default {
+  components: {
+    FilterComponent
+  },
   computed: {
     ...mapState(["products", "productPerPage"]),
     page: {
@@ -44,6 +54,11 @@ export default {
 <style lang="css" >
 .line-through {
   text-decoration: line-through;
+}
+.main-container {
+  max-width: 1000px;
+  display: block;
+  margin: auto;
 }
 </style>
 

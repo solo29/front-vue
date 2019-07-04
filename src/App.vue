@@ -10,26 +10,7 @@
       <v-spacer></v-spacer>
 
       <v-text-field v-model="searchString" clearable hide-details prepend-icon="search" single-line></v-text-field>
-      <v-menu offset-y>
-        <template v-slot:activator="{ on }">
-          <v-btn color="primary" dark v-on="on">Department</v-btn>
-        </template>
-        <v-list>
-          <v-list-tile v-for="(department, index) in departments" :key="index" @click="$store.dispatch('changeDepartment', department.department_id)">
-            <v-list-tile-title>{{ department.name }}</v-list-tile-title>
-          </v-list-tile>
-        </v-list>
-      </v-menu>
-      <v-menu offset-y>
-        <template v-slot:activator="{ on }">
-          <v-btn color="primary" dark v-on="on">Category</v-btn>
-        </template>
-        <v-list>
-          <v-list-tile v-for="(category, index) in categories.rows" :key="index" @click="$store.dispatch('changeCategory', category.category_id)">
-            <v-list-tile-title>{{ category.name }}</v-list-tile-title>
-          </v-list-tile>
-        </v-list>
-      </v-menu>
+
       <v-dialog v-model="dialog" width="800">
         <template v-slot:activator="{ on }">
           <v-btn color="warning" dark v-on="on">
@@ -60,7 +41,7 @@ export default {
   },
   data() {
     return {
-      dialog
+      dialog: false
     };
   },
   methods: {},

@@ -12,7 +12,7 @@ export default new Vuex.Store({
     searchString: null,
     products: [],
     page: 1,
-    productPerPage: 6,
+    productPerPage: 9,
     product: {},
     cart_id: null,
     cart: []
@@ -86,6 +86,11 @@ export default new Vuex.Store({
     },
     changePage({ dispatch, commit }, page) {
       commit("SET_PAGE", page);
+      dispatch("getProducts");
+    },
+    resetFilter({ dispatch, commit }) {
+      commit("SET_PAGE", 1);
+      commit("SET_SELECTED_TERM", {});
       dispatch("getProducts");
     },
     changeCategory({ dispatch, commit }, categoryId) {
