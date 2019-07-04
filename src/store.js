@@ -13,7 +13,9 @@ export default new Vuex.Store({
     products: [],
     page: 1,
     productPerPage: 6,
-    product: {}
+    product: {},
+    cart_id: null,
+    cart: []
   },
   mutations: {
     SET_CATEGORIES(state, categories) {
@@ -37,6 +39,12 @@ export default new Vuex.Store({
     },
     SET_SEARCH_STRING(state, term) {
       state.searchString = term;
+    },
+    SET_CART_ID(state, cart_id) {
+      state.cart_id = cart_id;
+    },
+    SET_CART(state, cart) {
+      state.cart = cart;
     }
   },
   actions: {
@@ -89,6 +97,38 @@ export default new Vuex.Store({
       commit("SET_PAGE", 1);
       commit("SET_SELECTED_TERM", { inDepartment: departmentId });
       dispatch("getProducts");
+    },
+    generateUniqueId({ commit }) {
+      let cart_id_local = localStorage.getItem("cart_id");
+      if (!_.isEmpty(cart_id_local)) {
+        commit("SET_CART_ID", cart_id_local);
+      } else {
+        axios.get("https://backendapi.turing.com/shoppingcart/generateUniqueId").then(res => {
+          commit("SET_CART_ID", res.data.cart_id);
+          localStorage.setItem("cart_id", res.data.cart_id);
+        });
+      }
+    },
+    addToCart({ dispatch }, params) {
+      axios.post("https://backendapi.turing.com/shoppingcart/add", params).then(res => {
+        dispatch("getCart");
+      });
+    },
+    getCart({ commit, state }) {
+      axios.get("https://backendapi.turing.com/shoppingcart/" + state.cart_id).then(res => {
+        commit("SET_CART", res.data);
+      });
+    },
+    updateCart({ dispatch }, params) {
+      axios.put("https://backendapi.turing.com/shoppingcart/update/" + params.item_id, { quantity: params.quantity }).then(res => {
+        dispatch("getCart");
+      });
+    },
+    removeProduct({ dispatch }, item_id) {
+      axios.delete("https://backendapi.turing.com/shoppingcart/removeProduct/" + item_id).then(res => {
+        console.log(res);
+        dispatch("getCart");
+      });
     }
   }
 });

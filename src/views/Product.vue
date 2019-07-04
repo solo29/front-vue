@@ -40,7 +40,7 @@
                   <v-btn fab small @click="++quantity">+</v-btn>
                   <input type="text" disabled v-model.number="quantity">
                   <v-btn fab small @click="quantity>1 ? --quantity: quantity=1">-</v-btn>
-                  <v-btn color="success">Add To Cart</v-btn>
+                  <v-btn color="success" @click="$store.dispatch('addToCart', {product_id: product.product_id,cart_id, quantity, attributes: size});">Add To Cart</v-btn>
                 </div>
 
                 <v-bottom-nav :active.sync="size" :value="true" absolute>
@@ -112,7 +112,8 @@ export default {
       )
       .then(res => (this.reviews = res.data));
   },
-  computed: mapState(["product"])
+  methods: {},
+  computed: mapState(["product", "cart_id"])
 };
 </script>
 <style scoped>

@@ -32,6 +32,7 @@
       </v-menu>
     </v-toolbar>
     <v-content>
+      <cart/>
       <router-view></router-view>
     </v-content>
   </v-app>
@@ -39,10 +40,12 @@
 
 <script>
 import { mapState } from "vuex";
-
+import cart from "./components/Cart";
 export default {
   name: "App",
-
+  components: {
+    cart
+  },
   methods: {},
   computed: {
     ...mapState(["categories", "products", "departments"]),
