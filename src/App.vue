@@ -30,9 +30,21 @@
           </v-list-tile>
         </v-list>
       </v-menu>
+      <v-dialog v-model="dialog" width="800">
+        <template v-slot:activator="{ on }">
+          <v-btn color="warning" dark v-on="on">
+            <v-icon>shopping_cart</v-icon>
+          </v-btn>
+          <v-badge left>
+            <template v-slot:badge>
+              <span>{{cart ? cart.length: '' }}</span>
+            </template>
+          </v-badge>
+        </template>
+        <cart/>
+      </v-dialog>
     </v-toolbar>
     <v-content>
-      <cart/>
       <router-view></router-view>
     </v-content>
   </v-app>
@@ -46,9 +58,14 @@ export default {
   components: {
     cart
   },
+  data() {
+    return {
+      dialog
+    };
+  },
   methods: {},
   computed: {
-    ...mapState(["categories", "products", "departments"]),
+    ...mapState(["categories", "products", "departments", "cart"]),
     searchString: {
       set(val) {
         console.log(val);
