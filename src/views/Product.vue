@@ -31,11 +31,21 @@
         </v-container>
       </v-card>
     </div>
-    <v-card v-for="(review,i) in reviews" :key="i" class="ma-3 pa-3">
-      <v-rating :value="i"></v-rating>
-      <p>{{review.review}}</p>
-    </v-card>
-    {{reviews}}
+    <div class="review-container">
+      <v-card v-for="(review,i) in reviews" :key="i" class="grid-container mt-2 pa-3">
+        <div class="name">
+          <v-rating :value="i"></v-rating>
+          <p>{{review.name}}</p>
+        </div>
+        <div class="date">
+          Posted On
+          <p>{{ new Date(review.created_on).toUTCString()}}</p>
+        </div>
+        <div class="comment">
+          <p>{{review.review}}</p>
+        </div>
+      </v-card>
+    </div>
   </div>
 </template>
 <script>
@@ -75,8 +85,43 @@ export default {
   display: block;
   margin: auto;
 }
+.review-container {
+  max-width: 700px;
+  left: 0;
+  right: 0;
+  display: block;
+  margin: auto;
+}
 .product-container .v-card {
   display: flex;
+}
+
+.grid-container {
+  max-width: 700px;
+
+  margin: auto;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: "name comment comment" "date comment comment";
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  vertical-align: center;
+}
+
+.name {
+  grid-area: name;
+}
+
+.date {
+  grid-area: date;
+}
+
+.comment {
+  grid-area: comment;
 }
 </style>
 
