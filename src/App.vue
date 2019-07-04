@@ -2,13 +2,13 @@
   <v-app>
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
+        <span>SHOP MATE</span>
+        <v-btn flat to="/">
+          <span class="mr-2">Home</span>
+        </v-btn>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn flat to="/">
-        <span class="mr-2">Home</span>
-      </v-btn>
+
       <v-text-field v-model="searchString" clearable hide-details prepend-icon="search" single-line></v-text-field>
       <v-menu offset-y>
         <template v-slot:activator="{ on }">

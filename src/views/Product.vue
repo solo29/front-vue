@@ -5,7 +5,7 @@
         <v-container>
           <v-layout row wrap>
             <v-flex xs12 md6>
-              <v-carousel height="400" v-if="product.image">
+              <v-carousel class="mb-5" height="380" v-if="product.image">
                 <v-carousel-item :src="'https://backendapi.turing.com/images/products/'+product.image"></v-carousel-item>
                 <v-carousel-item :src="'https://backendapi.turing.com/images/products/'+product.image_2"></v-carousel-item>
               </v-carousel>
@@ -25,6 +25,41 @@
                 <div v-else>
                   <h2>{{product.price}}$</h2>
                 </div>
+                <div class="color-picker">
+                  <v-radio-group v-model="color" row>
+                    <v-radio color="red" value="red" hide-details></v-radio>
+
+                    <v-radio color="green" value="green" hide-details></v-radio>
+
+                    <v-radio color="indigo" value="indigo" hide-details></v-radio>
+
+                    <v-radio color="blue " value="blue" hide-details></v-radio>
+                  </v-radio-group>
+                </div>
+                <div class="quantity-container">
+                  <v-btn fab small @click="++quantity">+</v-btn>
+                  <input type="text" disabled v-model.number="quantity">
+                  <v-btn fab small @click="quantity>1 ? --quantity: quantity=1">-</v-btn>
+                  <v-btn color="success">Add To Cart</v-btn>
+                </div>
+
+                <v-bottom-nav :active.sync="size" :value="true" absolute>
+                  <v-btn color="teal" flat value="XS">
+                    <span>XS</span>
+                  </v-btn>
+                  <v-btn color="teal" flat value="S">
+                    <span>S</span>
+                  </v-btn>
+                  <v-btn color="teal" flat value="M">
+                    <span>M</span>
+                  </v-btn>
+                  <v-btn color="teal" flat value="XL">
+                    <span>XL</span>
+                  </v-btn>
+                  <v-btn color="teal" flat value="XXL">
+                    <span>XXL</span>
+                  </v-btn>
+                </v-bottom-nav>
               </div>
             </v-flex>
           </v-layout>
@@ -55,7 +90,10 @@ export default {
   data() {
     return {
       locations: [],
-      reviews: []
+      reviews: [],
+      color: "red",
+      size: "M",
+      quantity: 1
     };
   },
   mounted() {
@@ -78,6 +116,18 @@ export default {
 };
 </script>
 <style scoped>
+.quantity-container {
+  display: flex;
+  justify-content: flex-start;
+  max-width: 30px;
+}
+.quantity-container input {
+  width: 18px;
+}
+.color-picker {
+  display: flex;
+  justify-content: flex-start;
+}
 .product-container {
   max-width: 700px;
   left: 0;
