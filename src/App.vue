@@ -26,6 +26,7 @@
       </v-dialog>
     </v-toolbar>
     <v-content>
+      <register/>
       <router-view></router-view>
     </v-content>
   </v-app>
@@ -34,10 +35,12 @@
 <script>
 import { mapState } from "vuex";
 import cart from "./components/Cart";
+import register from "./components/Register";
 export default {
   name: "App",
   components: {
-    cart
+    cart,
+    register
   },
   data() {
     return {

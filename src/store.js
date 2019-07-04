@@ -134,6 +134,9 @@ export default new Vuex.Store({
         console.log(res);
         dispatch("getCart");
       });
+    },
+    register({ dispatch }, params) {
+      axios.post("https://backendapi.turing.com/customer", params).then(console.log);
     }
   }
 });

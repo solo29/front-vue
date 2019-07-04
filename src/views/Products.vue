@@ -12,7 +12,7 @@
                 <v-img :src="'https://backendapi.turing.com/images/products/'+product.thumbnail"></v-img>
                 <v-card-title primary-title>
                   <div>
-                    <div class="headline">{{product.name}}</div>
+                    <div class="subheading">{{product.name}}</div>
                     <div v-if="_.get(product, 'discounted_price')>0">
                       <span class="line-through">{{product.price}}$</span> &nbsp;
                       <span>{{product.discounted_price}}$</span>
