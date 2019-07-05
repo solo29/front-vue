@@ -8,6 +8,7 @@
         </v-btn>
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-facebook-login v-on:login="fbLogin" app-id="352854622106208"></v-facebook-login>
       <v-btn to="/customer" v-if="_.has(customer,'name')">{{customer.name}}</v-btn>
       <v-dialog v-model="dialog" width="800">
         <template v-slot:activator="{ on }">
@@ -43,6 +44,7 @@
 </template>
 
 <script>
+import VFacebookLogin from "vue-facebook-login-component";
 import { mapState } from "vuex";
 import cart from "./components/Cart";
 import register from "./components/Register";
@@ -52,7 +54,8 @@ export default {
   components: {
     cart,
     register,
-    login
+    login,
+    VFacebookLogin
   },
   data() {
     return {
@@ -61,7 +64,11 @@ export default {
       loginDialog: false
     };
   },
-  methods: {},
+  methods: {
+    fbLogin(e) {
+      console.log(e);
+    }
+  },
   computed: mapState([
     "categories",
     "products",
