@@ -6,8 +6,12 @@
           <v-layout row wrap>
             <v-flex xs12 md6>
               <v-carousel class="mb-5" height="380" v-if="product.image">
-                <v-carousel-item :src="'https://backendapi.turing.com/images/products/'+product.image"></v-carousel-item>
-                <v-carousel-item :src="'https://backendapi.turing.com/images/products/'+product.image_2"></v-carousel-item>
+                <v-carousel-item
+                  :src="'https://backendapi.turing.com/images/products/'+product.image"
+                ></v-carousel-item>
+                <v-carousel-item
+                  :src="'https://backendapi.turing.com/images/products/'+product.image_2"
+                ></v-carousel-item>
               </v-carousel>
             </v-flex>
             <v-flex md6 xs12 class="pa-5">
@@ -37,10 +41,19 @@
                   </v-radio-group>
                 </div>
                 <div class="quantity-container">
-                  <v-btn fab small @click="++quantity">+</v-btn>
-                  <input type="text" disabled v-model.number="quantity">
-                  <v-btn fab small @click="quantity>1 ? --quantity: quantity=1">-</v-btn>
-                  <v-btn color="success" @click="$store.dispatch('addToCart', {product_id: product.product_id,cart_id, quantity, attributes: size});">Add To Cart</v-btn>
+                  <v-btn color="primary" fab small @click="++quantity">+</v-btn>
+                  <input type="text" disabled v-model.number="quantity" />
+                  <v-btn
+                    color="pink"
+                    class="white--text"
+                    fab
+                    small
+                    @click="quantity>1 ? --quantity: quantity=1"
+                  >-</v-btn>
+                  <v-btn
+                    color="success"
+                    @click="$store.dispatch('addToCart', {product_id: product.product_id,cart_id, quantity, attributes: size});"
+                  >Add To Cart</v-btn>
                 </div>
 
                 <v-bottom-nav :active.sync="size" :value="true" absolute>

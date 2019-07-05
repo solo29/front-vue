@@ -1,10 +1,9 @@
 <template>
   <v-app>
-    <v-toolbar app>
+    <v-toolbar color="teal" dark app>
       <v-toolbar-title class="headline text-uppercase">
-        <span>SHOP MATE</span>
         <v-btn flat to="/">
-          <span class="mr-2">Home</span>
+          <span class="mr-2">Shop Mate</span>
         </v-btn>
       </v-toolbar-title>
       <v-spacer></v-spacer>
@@ -22,7 +21,7 @@
           </v-badge>
         </template>
         <v-card>
-          <cart/>
+          <cart />
           <v-btn to="/checkout" @click="dialog=false">Checkout</v-btn>
         </v-card>
       </v-dialog>
@@ -30,15 +29,20 @@
         <template v-slot:activator="{ on }">
           <v-btn color="info" dark v-on="on">Register</v-btn>
         </template>
-        <register/>
+        <register />
       </v-dialog>
       <v-dialog v-if="!accessToken" v-model="loginDialog" width="300">
         <template v-slot:activator="{ on }">
           <v-btn color="info" dark v-on="on">Login</v-btn>
         </template>
-        <login/>
+        <login />
       </v-dialog>
-      <v-facebook-login v-if="!accessToken" version="v2.2" v-on:login="fbLogin" app-id="352854622106208"></v-facebook-login>
+      <v-facebook-login
+        v-if="!accessToken"
+        version="v2.2"
+        v-on:login="fbLogin"
+        app-id="352854622106208"
+      ></v-facebook-login>
       <v-btn v-if="accessToken" @click="$store.dispatch('logout')">LOGOUT</v-btn>
     </v-toolbar>
     <v-content>
