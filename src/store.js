@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import axios from "axios";
 
 Vue.use(Vuex);
 
@@ -15,8 +14,11 @@ export default new Vuex.Store({
     productPerPage: 9,
     product: {},
     cart_id: null,
-    cart: []
+    cart: [],
+    customer: localStorage.getItem("customer") ? JSON.parse(localStorage.getItem("customer")) : null,
+    accessToken: localStorage.getItem("accessToken")
   },
+
   mutations: {
     SET_CATEGORIES(state, categories) {
       state.categories = categories;
@@ -45,6 +47,12 @@ export default new Vuex.Store({
     },
     SET_CART(state, cart) {
       state.cart = cart;
+    },
+    SET_CUSTOMER(state, customer) {
+      state.customer = customer;
+    },
+    SET_TOKEN(state, accessToken) {
+      state.accessToken = accessToken;
     }
   },
   actions: {
@@ -136,7 +144,44 @@ export default new Vuex.Store({
       });
     },
     register({ dispatch }, params) {
-      axios.post("https://backendapi.turing.com/customer", params).then(console.log);
+      axios.post("https://backendapi.turing.com/customers", params).then(console.log);
+    },
+    login({ commit }, params) {
+      axios
+        .post("https://backendapi.turing.com/customers/login", params)
+        .then(res => {
+          commit("SET_CUSTOMER", res.data.customer);
+          commit("SET_TOKEN", res.data.accessToken);
+          localStorage.setItem("customer", JSON.stringify(res.data.customer));
+          localStorage.setItem("accessToken", res.data.accessToken);
+          window.axios.defaults.headers.common["user-key"] = localStorage.getItem("accessToken");
+        })
+        .catch(error => {
+          if (error) {
+            alert("Incorrect Credentials");
+            console.log(error);
+          }
+        });
+    },
+    logout({ commit }) {
+      commit("SET_CUSTOMER", null);
+      commit("SET_TOKEN", null);
+      localStorage.removeItem("customer");
+      localStorage.removeItem("accessToken");
+    },
+    updateCustomer({ commit }, customer) {
+      axios.put("https://backendapi.turing.com/customers/address", customer).then(console.log);
+      if (!_.isEmpty(customer, "credit_card") && customer.credit_card.length == 16) {
+        axios
+          .put("https://backendapi.turing.com/customers/creditCard", customer)
+          .then(console.log)
+          .catch(err => alert("Invalid Card"));
+      }
+    },
+    getCustomer({ commit }) {
+      axios.get("https://backendapi.turing.com/customer").then(res => {
+        commit("SET_CUSTOMER", res.data);
+      });
     }
   }
 });

@@ -1,10 +1,9 @@
 <template>
   <v-form ref="form">
     <v-card class="pa-3">
-      <v-text-field v-model="name" :rules="[rules.min8char, rules.required]" label="Name" required solo></v-text-field>
       <v-text-field v-model="email" :rules="[rules.email, rules.required]" label="E-mail" required solo></v-text-field>
       <v-text-field v-model="password" :rules="[rules.min8char, rules.required]" type="password" label="Password" required solo></v-text-field>
-      <v-btn @click="submit">Register</v-btn>
+      <v-btn @click="submit">Login</v-btn>
     </v-card>
   </v-form>
 </template>
@@ -17,14 +16,6 @@ export default {
       password: "",
       rules: {
         required: value => !!value || "Required.",
-
-        charRange: v => {
-          if (v) {
-            return v.length > 1 && v.length < 20 ? true : "Min 2 Chars Max 20";
-          } else {
-            return true;
-          }
-        },
         engChars: v =>
           !/[^A-Za-z\s]/.test(v) || "Only English characters is allowed",
         min8char: v => {
@@ -43,11 +34,10 @@ export default {
   },
   methods: {
     submit() {
-      if (!this.name || !this.email || !this.password) return;
+      if (!this.email || !this.password) return;
       if (!this.$refs.form.validate()) return;
 
-      this.$store.dispatch("register", {
-        name: this.name,
+      this.$store.dispatch("login", {
         email: this.email,
         password: this.password
       });

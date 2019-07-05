@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 
 import Products from "./views/Products.vue";
+import Customer from "./views/Customer.vue";
 
 Vue.use(Router);
 
@@ -13,6 +14,11 @@ export default new Router({
       path: "/",
       name: "products",
       component: Products
+    },
+    {
+      path: "/customer",
+      name: "customer",
+      component: Customer
     },
     {
       path: "/product/:id",
