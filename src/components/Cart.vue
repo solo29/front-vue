@@ -39,16 +39,25 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <div></div>
   </v-card>
 </template>
 <script>
 import { mapState } from "vuex";
+
 export default {
+  data() {
+    return {
+      amount: 22
+    };
+  },
   computed: mapState(["cart_id", "cart"]),
   mounted() {
     this.$store.dispatch("generateUniqueId");
     this.$store.dispatch("getCart");
-  }
+  },
+
+  methods: {}
 };
 </script>
 <style scoped>

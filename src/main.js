@@ -5,7 +5,9 @@ import router from "./router";
 import store from "./store";
 import lodash from "lodash";
 window.axios = require("axios");
+import VueStripeCheckout from "vue-stripe-checkout";
 
+Vue.use(VueStripeCheckout, "pk_test_NcwpaplBCuTL6I0THD44heRe");
 window.axios.defaults.headers.common["user-key"] = localStorage.getItem("accessToken");
 
 Vue.config.productionTip = false;

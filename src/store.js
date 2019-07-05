@@ -16,7 +16,8 @@ export default new Vuex.Store({
     cart_id: null,
     cart: [],
     customer: localStorage.getItem("customer") ? JSON.parse(localStorage.getItem("customer")) : null,
-    accessToken: localStorage.getItem("accessToken")
+    accessToken: localStorage.getItem("accessToken"),
+    access_token: null
   },
 
   mutations: {
@@ -181,6 +182,13 @@ export default new Vuex.Store({
     getCustomer({ commit }) {
       axios.get("https://backendapi.turing.com/customer").then(res => {
         commit("SET_CUSTOMER", res.data);
+      });
+    },
+    setCustomerFB({ commit }, fb_token) {
+      commit("SET_ACCESS_TOKEN", fb_token);
+      axios.post("https://backendapi.turing.com/customers/facebook", { access_token: fb_token }).then(res => {
+        commit("SET_CUSTOMER", res.data.customer);
+        commit("SET_TOKEN", res.data.accessToken);
       });
     }
   }

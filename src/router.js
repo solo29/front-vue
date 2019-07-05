@@ -3,6 +3,7 @@ import Router from "vue-router";
 
 import Products from "./views/Products.vue";
 import Customer from "./views/Customer.vue";
+import Checkout from "./views/Checkout.vue";
 
 Vue.use(Router);
 
@@ -10,6 +11,11 @@ export default new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
+    {
+      path: "/checkout",
+      name: "checkout",
+      component: Checkout
+    },
     {
       path: "/",
       name: "products",

@@ -8,7 +8,7 @@
         </v-btn>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-facebook-login v-on:login="fbLogin" app-id="666267820507991"></v-facebook-login>
+
       <v-btn to="/customer" v-if="_.has(customer,'name')">{{customer.name}}</v-btn>
       <v-dialog v-model="dialog" width="800">
         <template v-slot:activator="{ on }">
@@ -21,7 +21,10 @@
             </template>
           </v-badge>
         </template>
-        <cart/>
+        <v-card>
+          <cart/>
+          <v-btn to="/checkout" @click="dialog=false">Checkout</v-btn>
+        </v-card>
       </v-dialog>
       <v-dialog v-if="!accessToken" v-model="registerDialog" width="300">
         <template v-slot:activator="{ on }">
@@ -35,6 +38,7 @@
         </template>
         <login/>
       </v-dialog>
+      <v-facebook-login v-if="!accessToken" version="v2.2" v-on:login="fbLogin" app-id="352854622106208"></v-facebook-login>
       <v-btn v-if="accessToken" @click="$store.dispatch('logout')">LOGOUT</v-btn>
     </v-toolbar>
     <v-content>
@@ -66,7 +70,11 @@ export default {
   },
   methods: {
     fbLogin(e) {
-      console.log(e);
+      if (_.get(e, "status") == "connected") {
+        //  this.$store.commit("SET_TOKEN", e.authResponse.accessToken);
+        this.$store.dispatch("setCustomerFB", e.authResponse.accessToken);
+        console.log(e);
+      }
     }
   },
   computed: mapState([
