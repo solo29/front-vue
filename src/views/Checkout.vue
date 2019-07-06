@@ -31,7 +31,7 @@ export default {
       name: "Shut up and take my money!",
       description: "CRAP",
       currency: "USD",
-      amount: 99999,
+      amount: null,
       shippings: [],
       selectedShippingId: null
     };
@@ -60,17 +60,22 @@ export default {
         0
       );
       console.log(order, finalPrice);
+      finalPrice = Math.ceil(finalPrice * 100);
+      this.amount = finalPrice;
       const { token, args } = await this.$refs.checkoutRef.open();
+      console.log(token, args);
       const stripeRes = await axios.post(
         "https://backendapi.turing.com/stripe/charge/",
         {
-          stripeToken: token,
+          stripeToken: token.id,
           order_id: orderId,
           description: "crap Shirt",
           amount: finalPrice
         }
       );
-      console.log(stripeRes);
+      if (_.get(stripeRes, "data.paid")) {
+        this.$router.push("order/" + orderId);
+      }
     },
     done({ token, args }) {
       // token - is the token object
