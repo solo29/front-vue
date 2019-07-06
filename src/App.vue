@@ -8,7 +8,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <v-btn to="/customer" v-if="_.has(customer,'name')">{{customer.name}}</v-btn>
+      <v-btn color="primary" to="/customer" v-if="_.has(customer,'name')">{{customer.name}}</v-btn>
       <v-dialog v-model="dialog" width="800">
         <template v-slot:activator="{ on }">
           <v-btn color="warning" dark v-on="on">
@@ -21,29 +21,41 @@
           </v-badge>
         </template>
         <v-card>
-          <cart />
+          <cart/>
           <v-btn to="/checkout" @click="dialog=false">Checkout</v-btn>
         </v-card>
       </v-dialog>
       <v-dialog v-if="!accessToken" v-model="registerDialog" width="300">
         <template v-slot:activator="{ on }">
-          <v-btn color="info" dark v-on="on">Register</v-btn>
+          <v-btn class="hidden-xs-only" color="primary" dark v-on="on">Register</v-btn>
         </template>
-        <register />
+        <register/>
       </v-dialog>
       <v-dialog v-if="!accessToken" v-model="loginDialog" width="300">
         <template v-slot:activator="{ on }">
-          <v-btn color="info" dark v-on="on">Login</v-btn>
+          <v-btn class="hidden-xs-only" color="red" dark v-on="on">Login</v-btn>
         </template>
-        <login />
+        <login/>
       </v-dialog>
-      <v-facebook-login
-        v-if="!accessToken"
-        version="v2.2"
-        v-on:login="fbLogin"
-        app-id="352854622106208"
-      ></v-facebook-login>
-      <v-btn v-if="accessToken" @click="$store.dispatch('logout')">LOGOUT</v-btn>
+
+      <v-facebook-login class="hidden-xs-only" v-if="!accessToken" version="v2.2" v-on:login="fbLogin" app-id="352854622106208"></v-facebook-login>
+      <v-btn color="red" v-if="accessToken" @click="$store.dispatch('logout')">LOGOUT</v-btn>
+      <v-menu v-if="!accessToken" bottom left>
+        <template v-slot:activator="{ on }">
+          <v-btn dark icon v-on="on" class="display-xs-only hidden-sm-and-up">
+            <v-icon>more_vert</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list class="display-xs-only hidden-sm-and-up">
+          <v-list-tile @click="loginDialog=true">
+            <v-list-tile-title>Login</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile @click="registerDialog=true">
+            <v-list-tile-title>Register</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
     </v-toolbar>
     <v-content>
       <router-view></router-view>
