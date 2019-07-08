@@ -52,7 +52,7 @@
                   >-</v-btn>
                   <v-btn
                     color="success"
-                    @click="$store.dispatch('addToCart', {product_id: product.product_id,cart_id, quantity, attributes: size});"
+                    @click="$store.dispatch('addToCart', {product_id: product.product_id,cart_id, quantity, attributes: size+', '+color});"
                   >Add To Cart</v-btn>
                 </div>
 

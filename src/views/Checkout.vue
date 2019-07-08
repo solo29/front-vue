@@ -1,9 +1,36 @@
 <template>
   <div>
-    <cart/>
-    <vue-stripe-checkout ref="checkoutRef" :name="name" :description="description" :currency="currency" :amount="amount" :allow-remember-me="false" @done="done" @opened="opened" @closed="closed" @canceled="canceled"></vue-stripe-checkout>
+    <cart />
+    <vue-stripe-checkout
+      ref="checkoutRef"
+      :name="name"
+      :description="description"
+      :currency="currency"
+      :amount="amount"
+      :allow-remember-me="false"
+      @done="done"
+      @opened="opened"
+      @closed="closed"
+      @canceled="canceled"
+    ></vue-stripe-checkout>
     <v-card class="pa-3 center" v-if="!_.isEmpty(cart)">
-      <v-select v-model="selectedShippingId" :items="shippings" item-value="shipping_id" item-text="shipping_type" label="Shipping Method" solo></v-select>
+      <v-select
+        @change="fetchShippings"
+        v-model="customer.shipping_region_id"
+        :items="regions"
+        item-value="shipping_region_id"
+        item-text="shipping_region"
+        label="Region"
+        solo
+      ></v-select>
+      <v-select
+        v-model="selectedShippingId"
+        :items="shippings"
+        item-value="shipping_id"
+        item-text="shipping_type"
+        label="Shipping Method"
+        solo
+      ></v-select>
       <v-btn :disabled="!selectedShippingId" @click="checkout">Pay</v-btn>
     </v-card>
   </div>
@@ -17,14 +44,10 @@ export default {
   },
   computed: mapState(["customer", "cart_id", "cart"]),
   mounted() {
-    axios
-      .get(
-        "https://backendapi.turing.com/shipping/regions/" +
-          this.customer.shipping_region_id
-      )
-      .then(res => {
-        this.shippings = res.data;
-      });
+    this.fetchShippings();
+    axios.get("https://backendapi.turing.com/shipping/regions/").then(res => {
+      this.regions = res.data;
+    });
   },
   data() {
     return {
@@ -33,10 +56,21 @@ export default {
       currency: "USD",
       amount: null,
       shippings: [],
+      regions: [],
       selectedShippingId: null
     };
   },
   methods: {
+    fetchShippings() {
+      axios
+        .get(
+          "https://backendapi.turing.com/shipping/regions/" +
+            this.customer.shipping_region_id
+        )
+        .then(res => {
+          this.shippings = res.data;
+        });
+    },
     async checkout() {
       let res = await axios.post("https://backendapi.turing.com/orders/", {
         cart_id: this.cart_id,
