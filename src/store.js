@@ -15,9 +15,7 @@ export default new Vuex.Store({
     product: {},
     cart_id: null,
     cart: [],
-    customer: localStorage.getItem("customer")
-      ? JSON.parse(localStorage.getItem("customer"))
-      : null,
+    customer: localStorage.getItem("customer") ? JSON.parse(localStorage.getItem("customer")) : null,
     accessToken: localStorage.getItem("accessToken"),
     access_token: null
   },
@@ -72,18 +70,10 @@ export default new Vuex.Store({
     searchProducts({ commit, state }, searchString) {
       commit("SET_SEARCH_STRING", searchString);
 
-      let query = searchString
-        ? `search?query_string=${searchString}&all_words=on&`
-        : "?";
-      axios
-        .get(
-          `https://backendapi.turing.com/products/${query}page=${
-            state.page
-          }&limit=${state.productPerPage}`
-        )
-        .then(res => {
-          commit("SET_PRODUCTS", res.data);
-        });
+      let query = searchString ? `search?query_string=${searchString}&all_words=on&` : "?";
+      axios.get(`https://backendapi.turing.com/products/${query}page=${state.page}&limit=${state.productPerPage}`).then(res => {
+        commit("SET_PRODUCTS", res.data);
+      });
     },
     getProducts({ commit, state }, params) {
       let page = state.page;
@@ -94,15 +84,9 @@ export default new Vuex.Store({
         });
       }
       //state.selectedDepartmentId ? "inDepartment/" + state.selectedDepartmentId : "";
-      axios
-        .get(
-          `https://backendapi.turing.com/products/${term}?page=${page}&limit=${
-            state.productPerPage
-          }`
-        )
-        .then(res => {
-          commit("SET_PRODUCTS", res.data);
-        });
+      axios.get(`https://backendapi.turing.com/products/${term}?page=${page}&limit=${state.productPerPage}`).then(res => {
+        commit("SET_PRODUCTS", res.data);
+      });
     },
     getProduct({ commit }, id) {
       axios.get("https://backendapi.turing.com/products/" + id).then(res => {
@@ -133,49 +117,33 @@ export default new Vuex.Store({
       if (!_.isEmpty(cart_id_local)) {
         commit("SET_CART_ID", cart_id_local);
       } else {
-        axios
-          .get("https://backendapi.turing.com/shoppingcart/generateUniqueId")
-          .then(res => {
-            commit("SET_CART_ID", res.data.cart_id);
-            localStorage.setItem("cart_id", res.data.cart_id);
-          });
+        axios.get("https://backendapi.turing.com/shoppingcart/generateUniqueId").then(res => {
+          commit("SET_CART_ID", res.data.cart_id);
+          localStorage.setItem("cart_id", res.data.cart_id);
+        });
       }
     },
-    addToCart({ dispatch }, params) {
+    async addToCart({ dispatch }, params) {
       for (let i = 0; i < params.quantity; i++) {
-        axios
-          .post("https://backendapi.turing.com/shoppingcart/add", params)
-          .then(res => {
-            if (i + 1 == params.quantity) dispatch("getCart");
-          });
+        await axios.post("https://backendapi.turing.com/shoppingcart/add", params);
+        if (i + 1 == params.quantity) dispatch("getCart");
       }
     },
     getCart({ commit, state }) {
-      axios
-        .get("https://backendapi.turing.com/shoppingcart/" + state.cart_id)
-        .then(res => {
-          commit("SET_CART", res.data);
-        });
+      axios.get("https://backendapi.turing.com/shoppingcart/" + state.cart_id).then(res => {
+        commit("SET_CART", res.data);
+      });
     },
     updateCart({ dispatch }, params) {
-      axios
-        .put(
-          "https://backendapi.turing.com/shoppingcart/update/" + params.item_id,
-          { quantity: params.quantity }
-        )
-        .then(res => {
-          dispatch("getCart");
-        });
+      axios.put("https://backendapi.turing.com/shoppingcart/update/" + params.item_id, { quantity: params.quantity }).then(res => {
+        dispatch("getCart");
+      });
     },
     removeProduct({ dispatch }, item_id) {
-      axios
-        .delete(
-          "https://backendapi.turing.com/shoppingcart/removeProduct/" + item_id
-        )
-        .then(res => {
-          console.log(res);
-          dispatch("getCart");
-        });
+      axios.delete("https://backendapi.turing.com/shoppingcart/removeProduct/" + item_id).then(res => {
+        console.log(res);
+        dispatch("getCart");
+      });
     },
 
     login({ commit }, params) {
@@ -186,9 +154,7 @@ export default new Vuex.Store({
           commit("SET_TOKEN", res.data.accessToken);
           localStorage.setItem("customer", JSON.stringify(res.data.customer));
           localStorage.setItem("accessToken", res.data.accessToken);
-          window.axios.defaults.headers.common[
-            "user-key"
-          ] = localStorage.getItem("accessToken");
+          window.axios.defaults.headers.common["user-key"] = localStorage.getItem("accessToken");
         })
         .catch(error => {
           if (error) {
@@ -204,13 +170,8 @@ export default new Vuex.Store({
       localStorage.removeItem("accessToken");
     },
     updateCustomer({ commit }, customer) {
-      axios
-        .put("https://backendapi.turing.com/customers/address", customer)
-        .then(console.log);
-      if (
-        !_.isEmpty(customer, "credit_card") &&
-        customer.credit_card.length == 16
-      ) {
+      axios.put("https://backendapi.turing.com/customers/address", customer).then(console.log);
+      if (!_.isEmpty(customer, "credit_card") && customer.credit_card.length == 16) {
         axios
           .put("https://backendapi.turing.com/customers/creditCard", customer)
           .then(console.log)
@@ -233,9 +194,7 @@ export default new Vuex.Store({
           commit("SET_TOKEN", res.data.accessToken);
           localStorage.setItem("accessToken", res.data.accessToken);
           localStorage.setItem("customer", JSON.stringify(res.data.customer));
-          window.axios.defaults.headers.common[
-            "user-key"
-          ] = localStorage.getItem("accessToken");
+          window.axios.defaults.headers.common["user-key"] = localStorage.getItem("accessToken");
         });
     },
     resetCart({ commit }) {
